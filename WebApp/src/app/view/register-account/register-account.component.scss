@@ -1,0 +1,39 @@
+.register-account-page-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-family: "nunito", Open Sans, sans-serif !important;
+}
+
+.header {
+  text-align: center;
+  margin-top: 20px;
+
+  .header-text {
+    font-size: 30px;
+    font-weight: bold;
+    color: red;
+  }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+
+  .form-title {
+    width: 150px;
+    margin-top: 9px;
+  }
+
+  .item-input {
+    width: 300px;
+  }
+}
+
+.item-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

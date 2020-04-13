@@ -1,0 +1,7 @@
+<div class="header">
+    <div class="icon-button-container">
+        <i class="fas fa-user-circle fa-2x user-icon-button" (click)="onClickUserSetting()"></i>
+        <i *ngIf="isSignIn" class="fas fa-sign-out-alt fa-2x sign-out-icon-button" (click)="signOut()"></i>
+        <i *ngIf="!isSignIn" class="fas fa-sign-in-alt fa-2x sign-out-icon-button" (click)="signIn()"></i>
+    </div>
+</div>

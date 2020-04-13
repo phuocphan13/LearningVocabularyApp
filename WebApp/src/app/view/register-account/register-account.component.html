@@ -1,0 +1,56 @@
+<ngx-alerts></ngx-alerts>
+<div class="register-account-page-container">
+  <div class="register-container">
+    <div class="header">
+      <span class="header-text">TẠO TÀI KHOẢN</span>
+    </div>
+    <div class="form-container" [formGroup]="accountFormGroup">
+      <div class="user-name item-container">
+        <span class="form-title user-name-title">Tên đăng nhập:</span>
+        <input type="text" class="user-name-input item-input form-control" placeholder="Vui lòng nhập tên đăng nhập..."
+          formControlName="name" [(ngModel)]="account.name" name="name" ngModel
+          [class.is-invalid]="accountFormGroup.get('name').invalid && accountFormGroup.get('name').touched">
+      </div>
+      <div class="password item-container">
+        <span class="form-title password-title">Mật khẩu:</span>
+        <input type="password" class="password-input item-input form-control" placeholder="Vui lòng nhập mật khẩu..."
+          formControlName="password" [(ngModel)]="account.password" name="password" ngModel
+          [class.is-invalid]="accountFormGroup.get('password').invalid && accountFormGroup.get('password').touched">
+      </div>
+      <div class="confirm-password item-container">
+        <span class="form-title confirm-password-title">Nhập lại mật khẩu:</span>
+        <input type="password" class="confirm-password-input item-input form-control"
+          placeholder="Vùi lòng nhập lại mật khẩu..." formControlName="confirmPassword" [(ngModel)]="account.confirmPassword"
+          name="confirmPassword" ngModel
+          [class.is-invalid]="accountFormGroup.get('confirmPassword').invalid && accountFormGroup.get('confirmPassword').touched">
+      </div>
+      <div class="role item-container">
+        <span class="form-title role-title">Quyền:</span>
+        <ng-select class="role-input item-input" [items]="listRoles" bindLabel="name" bindValue="id"
+          formControlName="roleId" [(ngModel)]="account.roleId" name="roleId" ngModel
+          [class.is-invalid]="accountFormGroup.get('roleId').invalid && accountFormGroup.get('roleId').touched"
+          appendTo="body" [clearable]="false" placeholder="Vui lòng chọn quyền..." (change)="onChangeRole($event)">
+        </ng-select>
+      </div>
+      <div class="company item-container">
+        <span class="form-title company-title">Hợp tác xã:</span>
+        <ng-select class="company-input item-input" [items]="listCompanies" bindLabel="name" bindValue="id"
+          formControlName="companyId" [(ngModel)]="account.companyId" name="companyId" ngModel
+          [class.is-invalid]="accountFormGroup.get('companyId').invalid && accountFormGroup.get('companyId').touched"
+          appendTo="body" [clearable]="false" placeholder="Vui lòng chọn HTX...">
+        </ng-select>
+      </div>
+      <div class="expired-date item-container">
+        <span class="form-title expired-date-title">Ngày hết hạn:</span>
+        <input class="expired-date-input item-input form-control" placeholder="Nhập ngày hết hạn..." type="text"
+          formControlName="expiredDate" [(ngModel)]="account.expiredDate" name="expiredDate" ngModel
+          [class.is-invalid]="accountFormGroup.get('expiredDate').invalid && accountFormGroup.get('expiredDate').touched"
+          [minDate]="minDate" [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY' }" bsDatepicker>
+      </div>
+    </div>
+    <div class="footer-container">
+      <button class="btn btn-primary" (click)="onClickCreateAccount()">Tạo</button>
+      <button class="btn btn-danger" (click)="onClickCloseButton()">Hủy</button>
+    </div>
+  </div>
+</div>
