@@ -37,22 +37,5 @@ namespace Core.Helper
             var month = data.Value.Month < 10 ? $"0{data.Value.Month}" : $"{data.Value.Month}";
             return $"{day}-{month}-{data.Value.Year}";
         }
-
-        public static NotificationWarningEnum CheckStatusForDateTime(DateTime? date)
-        {
-            if(!date.HasValue)
-            {
-                return NotificationWarningEnum.Normal;
-            }
-            if (date.Value < DateTime.Now.AddDays(3))
-            {
-                return NotificationWarningEnum.Danger;
-            }
-            if (date.Value < DateTime.Now.AddDays(5))
-            {
-                return NotificationWarningEnum.Warning;
-            }
-            return NotificationWarningEnum.Normal;
-        }
     }
 }

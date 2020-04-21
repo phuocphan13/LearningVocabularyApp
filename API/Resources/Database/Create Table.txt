@@ -1,0 +1,55 @@
+create database LearningVocabulary
+
+use LearningVocabulary
+
+create table Account(
+	Id int identity(1,1) primary key,
+	Name Nvarchar(max),
+	Username varchar(max),
+	Password varchar(max),
+	LevelId int
+)
+
+
+create table Vocabulary(
+	Id int identity(1,1) primary key,
+	Text varchar(max),
+	Meaning Nvarchar(max),
+	Type int,
+	LevelId int
+)
+
+
+create table Day(
+	Id int identity(1,1) primary key,
+	Name Nvarchar(max),
+	Date Datetime
+)
+
+
+create table VocabularyTracking(
+	Id int identity(1,1) primary key,
+	AccountId int,
+	VocabularyId	int,
+	IsRemember	bit,
+	RemeberTimes	int,
+	NotRememberTimes	int,
+	RemeberLevel	int,
+)
+
+
+create table DayTracking(
+	Id int identity(1,1) primary key,
+	DayId	int,
+	AccountId	int,
+	IsComplete	bit,
+	WordsCounting	int,
+)
+
+
+create table Level(
+	Id int identity(1,1) primary key,
+	Name Nvarchar(max),
+)
+
+
