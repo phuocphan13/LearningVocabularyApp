@@ -26,11 +26,13 @@ namespace Service
             _unitOfWork = unitOfWork;
         }
 
+
+
         public bool ImportFile()
         {
             var path = _hostingEnvironment.WebRootPath.Replace("Content", "Resources") + "\\Excel\\Vocabularies.xlsx";
             ExcelPackage excel = new ExcelPackage(new FileInfo(path));
-            
+
             var validationRespone = ExcelDataValidation(excel);
 
             excel.SaveAs(new FileInfo(path));
@@ -46,36 +48,42 @@ namespace Service
 
             for (int row = 2; row <= excelSheet.Dimension.End.Row; row++)
             {
-                var vocabulary = new Vocabulary();
-
-                vocabulary.Text = excelSheet.Cells[row, 1].Value.ToString();
-                vocabulary.Meaning = excelSheet.Cells[row, 2].Value.ToString();
-
-                var typeArray = excelSheet.Cells[row, 3].Value.ToString().Replace("(", "").Replace(")", "").Split(",");
-                var typeString = "";
-                for (int i = 0; i < typeArray.Length; i++)
+                if (excelSheet.Cells[row, 5].Value.ToString() != "Imported")
                 {
-                    switch (typeArray[i])
+                    var vocabulary = new Vocabulary();
+
+                    vocabulary.Text = excelSheet.Cells[row, 1].Value.ToString();
+                    vocabulary.Meaning = excelSheet.Cells[row, 2].Value.ToString();
+
+                    var typeArray = excelSheet.Cells[row, 3].Value.ToString().Replace("(", "").Replace(")", "").Split(",");
+                    var typeString = "";
+                    for (int i = 0; i < typeArray.Length; i++)
                     {
-                        case "n":
-                            typeString += ((int)TypeEnum.Noun).ToString();
-                            break;
-                        case "v":
-                            typeString += ((int)TypeEnum.Verb).ToString();
-                            break;
-                        case "adj":
-                            typeString += ((int)TypeEnum.Adjective).ToString();
-                            break;
-                        case "adv":
-                            typeString += ((int)TypeEnum.Adverb).ToString();
-                            break;
+                        switch (typeArray[i])
+                        {
+                            case "n":
+                                typeString += ((int)TypeEnum.Noun).ToString();
+                                break;
+                            case "v":
+                                typeString += ((int)TypeEnum.Verb).ToString();
+                                break;
+                            case "adj":
+                                typeString += ((int)TypeEnum.Adjective).ToString();
+                                break;
+                            case "adv":
+                                typeString += ((int)TypeEnum.Adverb).ToString();
+                                break;
+                        }
                     }
+                    vocabulary.Type = int.Parse(typeString);
+
+                    vocabulary.LevelId = int.Parse(excelSheet.Cells[row, 4].Value.ToString());
+
+
+                    excelSheet.Cells[row, 5].Value = "Imported";
+
+                    listVocabularies.Add(vocabulary);
                 }
-                vocabulary.Type = int.Parse(typeString);
-
-                excelSheet.Cells[row, 4].Value = "Imported";
-
-                listVocabularies.Add(vocabulary);
             }
 
             return listVocabularies;
