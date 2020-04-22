@@ -2,11 +2,14 @@
 using Core.UoW;
 using Domain.Models;
 using Microsoft.AspNetCore.Hosting;
+using Model;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 
 namespace Service
@@ -14,20 +17,57 @@ namespace Service
     public class Service : IService
     {
         private readonly IRepository<Vocabulary> _vocabularyRepository;
+        private readonly IRepository<Account> _accountRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IUnitOfWork _unitOfWork;
 
         public Service(IRepository<Vocabulary> vocabularyRepository,
+            IRepository<Account> accountRepository,
             IHostingEnvironment hostingEnvironment,
             IUnitOfWork unitOfWork)
         {
             _vocabularyRepository = vocabularyRepository;
+            _accountRepository = accountRepository;
+
             _hostingEnvironment = hostingEnvironment;
             _unitOfWork = unitOfWork;
         }
 
+        #region Register
+        public bool Register(AccountModel account)
+        {
+            if(CheckAccountExisted(account.Username))
+            {
+                return false;
+            }
+            var accountEntity = new Account();
+            accountEntity.Name = account.Name;
+            accountEntity.Username = account.Username;
 
+            //var a = Hash.CreateMD5(Encoding.ASCII.GetBytes(account.Password));
 
+            using (MD5 md5Hash = MD5.Create())
+            {
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(account.Password));
+                StringBuilder sBuilder = new StringBuilder();
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+                accountEntity.Password = sBuilder.ToString();
+            }
+            _accountRepository.Insert(accountEntity);
+            return _unitOfWork.SaveChanges(); 
+        }
+
+        private bool CheckAccountExisted(string username)
+        {
+            var isExisted = _accountRepository.GetAll().Any(x => x.Username == username);
+            return isExisted;
+        }
+        #endregion
+
+        #region Import Excel
         public bool ImportFile()
         {
             var path = _hostingEnvironment.WebRootPath.Replace("Content", "Resources") + "\\Excel\\Vocabularies.xlsx";
@@ -88,5 +128,6 @@ namespace Service
 
             return listVocabularies;
         }
+        #endregion
     }
 }
