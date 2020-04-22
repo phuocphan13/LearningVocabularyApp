@@ -88,7 +88,7 @@ namespace Service
 
             for (int row = 2; row <= excelSheet.Dimension.End.Row; row++)
             {
-                if (excelSheet.Cells[row, 5].Value.ToString() != "Imported")
+                if (excelSheet.Cells[row, 5].Value.ToString() != "Imported" && !CheckVocabularyExisted(excelSheet.Cells[row, 1].Value.ToString()))
                 {
                     var vocabulary = new Vocabulary();
 
@@ -127,6 +127,12 @@ namespace Service
             }
 
             return listVocabularies;
+        }
+
+        private bool CheckVocabularyExisted(string text)
+        {
+            var isExisted = _vocabularyRepository.GetAll().Any(x => x.Text == text);
+            return isExisted;
         }
         #endregion
     }

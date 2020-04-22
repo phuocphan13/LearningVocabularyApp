@@ -24,10 +24,8 @@ import { ControlModule } from './controls/control.module';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ServiceModule } from './core/services/service.module';
 import { AppCommonModule } from './common/app-common.module';
-import { AuthCallbackComponent } from './core/auth-callback/auth-callback.component';
 import { ShellModule } from './core/shell/shell.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { MotoManagementModule } from './view/moto-management/moto-management.module';
 import { HeaderComponent } from './core/shell/header/header.component';
 import { RegisterAccountComponent } from './view/register-account/register-account.component';
 import { RegisterAccountModule } from './view/register-account/register-account.module';
@@ -46,14 +44,12 @@ export const environment = {
 @NgModule({
   declarations: [
     AppComponent,
-    AuthCallbackComponent,
     LogoutCallbackComponent,
   ],
   imports: [
     ModalsModule,
     AppCommonModule,
 
-    MotoManagementModule,
     RegisterAccountModule,
 
     ServiceModule,

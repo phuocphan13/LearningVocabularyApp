@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserShareService } from './core/services/user-shared.service';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +8,10 @@ import { UserShareService } from './core/services/user-shared.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private router: Router,
-    private userShareService: UserShareService) {
+  constructor() {
 
   }
 
   ngOnInit() {
-    // this.router.navigateByUrl("management");
-    // this.router.navigateByUrl("management/detail");
-    this.userShareService.getAuthenData();
   }
 }
