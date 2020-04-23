@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Core.Helper
@@ -36,6 +37,20 @@ namespace Core.Helper
             var day = data.Value.Day < 10 ? $"0{data.Value.Day}" : $"{data.Value.Day}";
             var month = data.Value.Month < 10 ? $"0{data.Value.Month}" : $"{data.Value.Month}";
             return $"{day}-{month}-{data.Value.Year}";
+        }
+
+        public static string Hashing(string text)
+        {
+            StringBuilder sBuilder = new StringBuilder();
+            using (MD5 md5Hash = MD5.Create())
+            {
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(text));
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+            }
+            return sBuilder.ToString();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Core.Repositories;
+﻿using Core.Helper;
+using Core.Repositories;
 using Core.UoW;
 using Domain.Models;
 using Microsoft.AspNetCore.Hosting;
@@ -43,19 +44,8 @@ namespace Service
             var accountEntity = new Account();
             accountEntity.Name = account.Name;
             accountEntity.Username = account.Username;
+            accountEntity.Password =  TransformHelper.Hashing(account.Password);
 
-            //var a = Hash.CreateMD5(Encoding.ASCII.GetBytes(account.Password));
-
-            using (MD5 md5Hash = MD5.Create())
-            {
-                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(account.Password));
-                StringBuilder sBuilder = new StringBuilder();
-                for (int i = 0; i < data.Length; i++)
-                {
-                    sBuilder.Append(data[i].ToString("x2"));
-                }
-                accountEntity.Password = sBuilder.ToString();
-            }
             _accountRepository.Insert(accountEntity);
             return _unitOfWork.SaveChanges(); 
         }
@@ -64,6 +54,31 @@ namespace Service
         {
             var isExisted = _accountRepository.GetAll().Any(x => x.Username == username);
             return isExisted;
+        }
+        #endregion
+
+        #region Log in
+        public LoginReturnModel Login(LoginModel login)
+        {
+            var account = _accountRepository.FirstOrDefault(x => x.Username == login.Username);
+            if(account == null)
+            {
+                return null;
+            }
+
+            var hasingText = TransformHelper.Hashing(login.Password);
+
+            if(hasingText == account.Password)
+            {
+                return new LoginReturnModel()
+                {
+                    Id = account.Id,
+                    Name = account.Name,
+                    Username = account.Username
+                };
+            }
+
+            return null;
         }
         #endregion
 
