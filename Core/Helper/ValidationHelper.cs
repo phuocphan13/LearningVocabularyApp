@@ -17,18 +17,6 @@ namespace Core.Helper
             return true;
         }
 
-        public static bool ValidationForPhoneNumber(string data)
-        {
-            var isNumber = decimal.TryParse(data, out decimal result);
-            if (isNumber)
-            {
-                var regularExpression = @"^09\(?([0-9]{1})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$";
-                var r = new Regex(regularExpression);
-                return r.IsMatch(data);
-            }
-            return false;
-        }
-
         public static bool CheckNullObject<T>(T data) where T : class
         {
             foreach (PropertyInfo propertyInfo in data.GetType().GetProperties())

@@ -37,17 +37,17 @@ namespace Service
         #region Register
         public bool Register(AccountModel account)
         {
-            if(CheckAccountExisted(account.Username))
+            if (CheckAccountExisted(account.Username))
             {
                 return false;
             }
             var accountEntity = new Account();
             accountEntity.Name = account.Name;
             accountEntity.Username = account.Username;
-            accountEntity.Password =  TransformHelper.Hashing(account.Password);
+            accountEntity.Password = TransformHelper.Hashing(account.Password);
 
             _accountRepository.Insert(accountEntity);
-            return _unitOfWork.SaveChanges(); 
+            return _unitOfWork.SaveChanges();
         }
 
         private bool CheckAccountExisted(string username)
@@ -61,14 +61,14 @@ namespace Service
         public LoginReturnModel Login(LoginModel login)
         {
             var account = _accountRepository.FirstOrDefault(x => x.Username == login.Username);
-            if(account == null)
+            if (account == null)
             {
                 return null;
             }
 
             var hasingText = TransformHelper.Hashing(login.Password);
 
-            if(hasingText == account.Password)
+            if (string.Compare(hasingText, account.Password) == 0)
             {
                 return new LoginReturnModel()
                 {
